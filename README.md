@@ -1,2 +1,8 @@
 # salmonella-genome-assembly
-Genomics Assignment 1
+**Introduction**
+
+
+**Methods**
+
+
+**References**
