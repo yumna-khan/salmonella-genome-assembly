@@ -10,6 +10,7 @@ To address these challenges, Minimap2 provides high performance alignments optim
 
 In this study, Oxford Nanopore reads will be assembled into a consensus genome for _Salmonella enterica_ using Flye. The resulting consensus will be aligned to an NCBI reference genome using Minimap2, followed by integrated variant calling and visualization.
 
+
 ## Methods
 ### Data Description
 Raw ONT sequencing reads (FASTQ format) for _Salmonella enterica_ were obtained from the NCBI Sequence Read Archive (SRA) under accession SRR32410565. The dataset was generated using R10 chemistry, providing an estimated base quality of Q20+ and an N50 read length of 5–15 kb. For the reference based analyses, the complete genome assembly for _Salmonella enterica_ (ASM694v2) was retrieved from the NCBI RefSeq database in FASTA format.
@@ -18,18 +19,35 @@ Raw ONT sequencing reads (FASTQ format) for _Salmonella enterica_ were obtained 
 Initial read quality and length distributions were assessed using NanoPlot (v1.42.0) to determine the necessity of quality based filtering (De Coster et al., 2018). Following this assessment, raw reads were processed with Filtlong (v0.2.1) to remove short and low accuracy sequences. Filtering was performed using a minimum length threshold of 1,000 bp and a target weight of 90% to prioritize the highest quality reads, a strategy shown to improve the efficiency of downstream _de novo_ assembly (Wick et al., 2023).
 
 ### Genome Assembly
-Reads were assembled using _de novo_ Flye (v2.9.6), a long read assembler optimized for error-prone ONT data (Kolmogorov et al., 2019), with the --nano-raw option, and a genome size of approximately 5 Mb (Megabases). Default parameters were used unless otherwise specified.
+Reads were assembled using _de novo_ Flye (v2.9.6), a long read assembler optimized for error-prone ONT data (Kolmogorov et al., 2019), with the `--nano-raw` option, and a genome size of approximately 5 Mb (Megabases). Default parameters were used unless otherwise specified.
 
 ### Alignment
-The assembled genome was aligned to the reference genome using Minimap2 (v2.30). The -x asm5 preset was used to optimize the alignment of closely related assemblies with a divergence of <5% (Li, 2018). For visualization and downstream read based analysis, raw reads were independently mapped to the reference using the -ax map-ont preset. Resulting SAM files were converted to compressed BAM format, sorted, and indexed using SAMtools (v1.19).
+The assembled genome was aligned to the reference genome using Minimap2 (v2.30). The `-x asm5` preset was used to optimize the alignment of closely related assemblies with a divergence of <5% (Li, 2018). For visualization and downstream read based analysis, raw reads were independently mapped to the reference using the `-ax map-ont` preset. Resulting SAM files were converted to compressed BAM format, sorted, and indexed using SAMtools (v1.19).
 
 ### Variant calling
-Variants between the assembly and reference were identified using paftools.js. This processes PAF alignments to call SNPs and small indels, allowing direct comparison between the assembled and the reference genome (Li, 2018). To validate the assembly, variants were also called from the raw read alignments using Clair3 (v1.0.10).
+Variants between the assembly and reference were identified using `paftools.js`. This processes PAF alignments to call SNPs and small indels, allowing direct comparison between the assembled and the reference genome (Li, 2018). To validate the assembly, variants were also called from the raw read alignments using Clair3 (v1.0.10).
 
 ### Visualization
 Final validation was performed using the IGV (v2.19.7). The ASM694v2 reference, the Flye assembly BAM, and the read alignment BAM were loaded simultaneously. This allowed for the visual inspection of alignment consistency across the genome, the verification of contig junctions, and systematic evaluation of discrepancies between assembly and read based variant calls (Wick et al., 2023).
 
 
+## References
+De Coster, W., D’Hert, S., Schultz, D. T., Cruts, M., & Van Broeckhoven, C. (2018). NanoPack: visualizing and processing long-read sequencing data. Bioinformatics, 34(15), 2666–2669. https://academic.oup.com/bioinformatics/article/34/15/2666/4934939
 
+Kolmogorov, M., Yuan, J., Lin, Y., & Pevzner, P. A. (2019). Assembly of long, error-prone reads using repeat graphs. Nature Biotechnology, 37(5), 540–546. https://doi.org/10.1038/s41587-019-0072-8
 
+Koren, S., Harhay, G. P., Smith, T. P., Bono, J. L., Harhay, D. M., Mcvey, S. D., Radune, D., Bergman, N. H., & Phillippy, A. M. (2013). Reducing assembly complexity of microbial genomes with single-molecule sequencing. Genome Biology, 14(9), R101. https://doi.org/10.1186/gb-2013-14-9-r101
 
+Li, H. (2018). Minimap2: pairwise alignment for nucleotide sequences. Bioinformatics, 34(18), 3094–3100. https://academic.oup.com/bioinformatics/article/34/18/3094/4994778
+
+Magoc, T., Pabinger, S., Canzar, S., Liu, X., Su, Q., Puiu, D., Tallon, L. J., & Salzberg, S. L. (2013). GAGE-B: an evaluation of genome assemblers for bacterial organisms. Bioinformatics, 29(14), 1718–1725. https://doi.org/10.1093/bioinformatics/btt273
+
+Sedlazeck, F. J., Rescheneder, P., Smolka, M., Fang, H., Nattestad, M., Von Haeseler, A., & Schatz, M. C. (2018b). Accurate detection of complex structural variations using single-molecule sequencing. Nature Methods, 15(6), 461–468. https://doi.org/10.1038/s41592-018-0001-7
+
+Wick, R. R., Judd, L. M., Cerdeira, L. T., Hawkey, J., Méric, G., Vezina, B., Wyres, K. L., & Holt, K. E. (2021). Trycycler: consensus long-read assemblies for bacterial genomes. Genome Biology, 22(1), 266. https://doi.org/10.1186/s13059-021-02483-z
+
+Wick, R. R., Judd, L. M., & Holt, K. E. (2023). Assembling the perfect bacterial genome using Oxford Nanopore and Illumina sequencing. PLoS Computational Biology, 19(3), e1010905. https://doi.org/10.1371/journal.pcbi.1010905
+
+Wick, R. R., Judd, L. M., Stinear, T. P., & Monk, I. R. (2025a). Are reads required? High-precision variant calling from bacterial genome assemblies. Access Microbiology, 7(5). https://doi.org/10.1099/acmi.0.001025.v3
+
+Wick, R. R., P Howden, B., & P Stinear, T. (2025b, August 28). Autocycler: long-read consensus assembly for bacterial genomes. Oxford Academic. https://academic.oup.com/bioinformatics/article/41/9/btaf474/8242761
