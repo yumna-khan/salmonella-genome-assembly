@@ -63,17 +63,22 @@ Lastly, a barplot was created to view specific genes containing structural varia
 
 
 
+
 <img width="3000" height="3000" alt="Image" src="https://github.com/user-attachments/assets/c2a59926-7fb1-4bf9-879f-2e15a4bb0a81" />
 
 **Figure 1:** Circos visualization of alignments between the assembled contigs and the _Salmonella enterica_ reference genome (ASM694v2) after **filtering**. The reference chromosome is shown in grey, with assembled contigs shown in blue and orange. 
 
 
 
+
 <img width="3000" height="3000" alt="Image" src="https://github.com/user-attachments/assets/7e3e69c0-3d10-4270-aeb0-b253244e9878" />
+
 **Figure 2:** Circos visualization of unfiltered alignments between the assembled contigs and the _Salmonella enterica_ reference genome (ASM694v2). The reference is shown in grey, with contigs shown in blue, orange, and red. 
 
 
+
 <img width="3000" height="3000" alt="Image" src="https://github.com/user-attachments/assets/8475304f-c524-43a7-93e2-7e95ed22f1a8" />
+
 **Figure 3:** Circos plot showing the distribution of SNPs (blue) and indels (red) relative to the Salmonella enterica reference genome (grey).
 
 
