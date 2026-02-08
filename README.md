@@ -42,6 +42,20 @@ Lastly, a barplot was created to view specific genes containing structural varia
 
 # Results
 
+| Category                    | Metric                     | Value |
+| --------------------------- | -------------------------- | ----- |
+| **Sequencing (NanoPlot)**   | Total yield (Mb)           | ~809  |
+|                             | Estimated coverage (x)     | >150x |
+|                             | Median read quality (Q)    | 23.7  |
+| **Assembly (Flye / QUAST)** | Number of contigs          | 3     |
+|                             | Total assembly length (Mb) | ~4.7  |
+|                             | N50 (Mb)                   | ~4.6  |
+|                             | Mismatches per 100 kbp     | 27    |
+| **Alignment (SAMtools)**    | Reads mapped (%)           | 94.3  |
+|                             | Average depth (×)          | ~154  |
+
+
+
 # Discussion
 
 
