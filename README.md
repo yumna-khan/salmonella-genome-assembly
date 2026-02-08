@@ -83,6 +83,7 @@ Lastly, a barplot was created to view specific genes containing structural varia
 
 
 <img width="960" height="488" alt="Image" src="https://github.com/user-attachments/assets/20ac8116-bdee-40e2-8d3c-bc19abf982ee" />
+
 **Figure 4:** Bar plot showing the number of SNPs and indels per gene. Only genes containing two or more variants are shown to emphasize loci with elevated sequence variation.
 
 
