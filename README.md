@@ -1,5 +1,6 @@
-# salmonella-genome-assembly
-## Introduction
+# Salmonella enterica Genom Assembly
+# General Overview
+# Introduction
 Genome assembly reconstructs a complete DNA sequence from shorter sequencing reads, enabling the study of an organism’s genetic content (Koren et al., 2013). Since many sequencing platforms cannot read an entire chromosome in a single read, DNA is fragmented and sequenced multiple times to ensure sufficient coverage across the genome (Wick et al., 2023). Despite advances in sequencing technologies, genome assembly remains challenging due to repetitive regions, sequencing errors, and uneven coverage. In particular, repeats longer than individual reads can result in fragmented or misassembled genomes, limiting their utility for downstream comparative and functional analyses (Koren et al., 2013). 
 
 These challenges are especially relevant for bacterial pathogens such as _Salmonella enterica_, a leading cause of foodborne illness in the United States (Han et al., 2024). The severity of these infections varies significantly between strains, driven largely by the unique genetic makeup of specific serovars. Characterizing these genetic features is essential for understanding pathogen evolution, antimicrobial resistance, and adaptation to environmental pressures (Han et al., 2024). Therefore, this study aims to reconstruct the _Salmonella enterica_ genome using long-read sequencing and to evaluate assembly quality through comparison with a reference genome.
@@ -13,27 +14,38 @@ To address these challenges, Minimap2 provides high performance alignments optim
 In this study, Oxford Nanopore reads will be assembled into a consensus genome for _Salmonella enterica_ using Flye. The resulting consensus will be aligned to an NCBI reference genome using Minimap2, followed by integrated variant calling and visualization.
 
 
-## Methods
-### Data Description
-Raw ONT sequencing reads (FASTQ format) for _Salmonella enterica_ were obtained from the NCBI Sequence Read Archive (SRA) under accession SRR32410565. The dataset was generated using R10 chemistry, providing an estimated base quality of Q20+ and an N50 read length of 5–15 kb. For the reference based analyses, the complete genome assembly for _Salmonella enterica_ (ASM694v2) was retrieved from the NCBI RefSeq database in FASTA format.
+# Methods
+## 1. Data Description
+Raw ONT sequencing reads (FASTQ format) for _Salmonella enterica_ were obtained from the NCBI Sequence Read Archive (SRA) under accession SRR32410565. The dataset was generated using R10 chemistry, providing an estimated base quality of Q20+ and an N50 read length of 5–15 kb. For the reference based analyses, the complete genome assembly for _Salmonella enterica_ (ASM694v2) was retrieved from the NCBI RefSeq database in FASTA and GTF/GFF format.
 
-### Quality Control
-Initial read quality and length distributions were assessed using NanoPlot (v1.42.0) to determine the necessity of quality based filtering (De Coster et al., 2018). Following this assessment, raw reads were processed with Filtlong (v0.2.1) to remove short and low accuracy sequences. Filtering was performed using a minimum length threshold of 1,000 bp and a target weight of 90% to prioritize the highest quality reads, a strategy shown to improve the efficiency of downstream _de novo_ assembly (Wick et al., 2023).
+## 2. Quality Control
+Initial read quality and length distributions were assessed using NanoPlot (v1.42.0) to determine the necessity of quality based filtering (De Coster et al., 2018). Given the high read quality (Q20+) and consistent length distribution, additional filtering was unlikely to improve assembly accuracy. Moreover, strict filtering can disproportionately remove low coverage or shorter reads originating, potentially reducing assembly completeness.
 
-### Genome Assembly
-Reads were assembled using _de novo_ Flye (v2.9.6), a long read assembler optimized for error-prone ONT data (Kolmogorov et al., 2019), with the `--nano-raw` option, and a genome size of approximately 5 Mb (Megabases). Default parameters were used unless otherwise specified.
+## 3. Genome Assembly
+Reads were assembled using de novo Flye (v2.9.6), a long read assembler optimized for error-prone ONT data (Kolmogorov et al., 2019); with the use of the `--nano-hq` option, and a genome size of approximately 5 Mb (Megabases) (`--genome-size 5m`). Note, `--nano-hq` was chosen over `--nano-raw` due to the high quality reads of Q20+. Moreover, QUAST (v5.2.0) was selected to assess contiguity, consensus accuracy, and large scale structural consistency with the reference genome, which is critical for evaluating the reliability of downstream variant and structural analyses (Gurevich et al., 2013). 
 
-### Alignment
-The assembled genome was aligned to the reference genome using Minimap2 (v2.30). The `-x asm5` preset was used to optimize the alignment of closely related assemblies with a divergence of <5% (Li, 2018). For visualization and downstream read based analysis, raw reads were independently mapped to the reference using the `-ax map-ont` preset. Resulting SAM files were converted to compressed BAM format, sorted, and indexed using SAMtools (v1.19).
+## 4. Alignment
+Two alignment steps were performed to assess different aspects of data quality and assembly accuracy. The raw Oxford Nanopore data was aligned to the reference genome using Minimap2 (v2.28) with the `-ax map-ont` preset, which is optimized for the error profile of ONT reads, and is recommended for raw ONT read alignment (Li et al., 2018). Resulting SAM files were converted to compressed BAM format, sorted, and indexed using SAMtools (v1.22.1). Alignment statistics, including mapping rate, depth of coverage, and read level quality metrics, were obtained using SAMtools flagstat and depth to confirm sufficient coverage for assembly. An average depth of **154x** was observed.
 
-### Variant calling
-Variants between the assembly and reference were identified using `paftools.js`. This processes PAF alignments to call SNPs and small indels, allowing direct comparison between the assembled and the reference genome (Li, 2018). To validate the assembly, variants were also called from the raw read alignments using Clair3 (v1.0.10).
-
-### Visualization
-Final validation was performed using the IGV (v2.19.7). The ASM694v2 reference, the Flye assembly BAM, and the read alignment BAM were loaded simultaneously. This allowed for the visual inspection of alignment consistency across the genome, the verification of contig junctions, and systematic evaluation of discrepancies between assembly and read based variant calls (Wick et al., 2023).
+Furthermore, to verify structural variation and assembly analysis, the assembled genome was aligned to the reference genome using Minimap2 with the preset `-ax asm5`. This preset was selected because it is optimized for alignment of assembled sequences with low divergence (≤5%) (E Pearce, 2021). 
 
 
-## References
+## 5. Variant calling
+To compute variant calling, the raw read alignments used Clair3 (v1.1.2). The contigs were generated using the BAM file, and the `--platform ont` parameter was chosen to specify the nanopore data. In addition, the `--include_all_ctgs` option was selected to ensure that all contigs from the Flye assembly were considered, including any small or low coverage contigs for downstream comparative analyses.
+
+## 6. Visualization
+Final validation was performed using Circos (v0.69-9) and bar plots generated in R (v4.5.2). Circos was used in combination with MUMmer (v4.0.0rc1) and BCFtools (v1.19) to assess structural relationships between the assembled contigs and the reference genome. Alignments were generated using Nucmer and processed with `show-coords`, filtering for high confidence matches with ≥90% sequence identity and alignment lengths ≥10 kb (Jain, 2018). These thresholds were chosen to retain meaningful alignments while excluding short or low identity matches that may represent repetitive or ambiguous regions. 
+
+Reference and assembly sequence lengths were indexed using samtools faidx to generate karyotype files required for Circos visualization. Circos plots were configured to emphasize genome wide synteny, and additional plots were produced to compare filtered versus unfiltered alignments as well as to visualize the genomic distribution of SNPs and indels.
+
+Lastly, a barplot was created to view specific genes containing structural variants of indels or SNPs. This analysis was performed in R using the reference genome annotation (GFF) and variant calls (VCF). To improve interpretability, only genes containing two or more variants were included, allowing emphasis on genes with potentially meaningful levels of variation.
+
+# Results
+
+# Discussion
+
+
+# References
 De Coster, W., D’Hert, S., Schultz, D. T., Cruts, M., & Van Broeckhoven, C. (2018). NanoPack: visualizing and processing long-read sequencing data. Bioinformatics, 34(15), 2666–2669. https://academic.oup.com/bioinformatics/article/34/15/2666/4934939
 
 Kolmogorov, M., Yuan, J., Lin, Y., & Pevzner, P. A. (2019). Assembly of long, error-prone reads using repeat graphs. Nature Biotechnology, 37(5), 540–546. https://doi.org/10.1038/s41587-019-0072-8
