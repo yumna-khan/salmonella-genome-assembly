@@ -1,4 +1,4 @@
-# Salmonella enterica Genom Assembly
+# Salmonella enterica Genome Assembly
 # General Overview
 # Introduction
 Genome assembly reconstructs a complete DNA sequence from shorter sequencing reads, enabling the study of an organism’s genetic content (Koren et al., 2013). Since many sequencing platforms cannot read an entire chromosome in a single read, DNA is fragmented and sequenced multiple times to ensure sufficient coverage across the genome (Wick et al., 2023). Despite advances in sequencing technologies, genome assembly remains challenging due to repetitive regions, sequencing errors, and uneven coverage. In particular, repeats longer than individual reads can result in fragmented or misassembled genomes, limiting their utility for downstream comparative and functional analyses (Koren et al., 2013). 
@@ -42,6 +42,7 @@ Lastly, a barplot was created to view specific genes containing structural varia
 
 # Results
 
+**Table 1:** Summary of sequencing, assembly, and alignment quality
 | Category                    | Metric                     | Value |
 | --------------------------- | -------------------------- | ----- |
 | **Sequencing (NanoPlot)**   | Total yield (Mb)           | ~809  |
@@ -53,6 +54,12 @@ Lastly, a barplot was created to view specific genes containing structural varia
 |                             | Mismatches per 100 kbp     | 27    |
 | **Alignment (SAMtools)**    | Reads mapped (%)           | 94.3  |
 |                             | Average depth (×)          | ~154  |
+
+Table 2: Genes variants counts, location, and function
+| Gene               | Genomic location       | SNP count | Indel count | Functional annotation                                    |
+| ------------------ | ---------------------- | --------- | ----------- | -------------------------------------------------------- |
+| **pSLT108 (traT)** | pSLT virulence plasmid | 755      | 41         | Outer membrane lipoprotein involved in surface exclusion |
+| **STM1022**        | Chromosome             | 103      | 68         | Chaperone-associated protein involved in stress response |
 
 
 
