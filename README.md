@@ -77,25 +77,22 @@ Lastly, a barplot was created to view specific genes containing structural varia
 
 
 
-<img width="3000" height="3000" alt="Image" src="https://github.com/user-attachments/assets/c2a59926-7fb1-4bf9-879f-2e15a4bb0a81" />
+![Figure 1: Circos assembly map of raw reads to reference (filtered)](results/figures/circos_filtered.png)
 
 **Figure 1:** Circos visualization of alignments between the assembled contigs and the _Salmonella enterica_ reference genome (ASM694v2) after **filtering**. The reference chromosome is shown in grey, with assembled contigs shown in blue and orange. 
 
 
-
-
-<img width="3000" height="3000" alt="Image" src="https://github.com/user-attachments/assets/7e3e69c0-3d10-4270-aeb0-b253244e9878" />
+![Figure 2: Circos assembly map of raw reads to reference (unfiltered)](results/figures/circos_unfiltered.png)
 
 **Figure 2:** Circos visualization of unfiltered alignments between the assembled contigs and the _Salmonella enterica_ reference genome (ASM694v2). The reference is shown in grey, with contigs shown in blue, orange, and red. 
 
 
-
-<img width="3000" height="3000" alt="Image" src="https://github.com/user-attachments/assets/8475304f-c524-43a7-93e2-7e95ed22f1a8" />
+![Figure 3: Circos assembly map of variants](results/figures/circos_sv.png)
 
 **Figure 3:** Circos plot showing the distribution of SNPs (blue) and indels (red) relative to the _Salmonella enterica_ reference genome (grey).
 
 
-<img width="960" height="488" alt="Image" src="https://github.com/user-attachments/assets/20ac8116-bdee-40e2-8d3c-bc19abf982ee" />
+![Figure 4: barplot of variants per gene](results/figures/variants_per_gene.png)
 
 **Figure 4:** Bar plot showing the number of SNPs and indels per gene. Only genes containing two or more variants are shown to emphasize loci with elevated sequence variation.
 
@@ -118,7 +115,7 @@ Whole genome alignment of the assembled contigs to the reference genome was perf
 A notable gap in the filtered alignment corresponds to NC_003277.2, the pSLT virulence plasmid. This plasmid was excluded under filtering conditions due to length and/or quality thresholds, highlighting a common challenge in genome assembly workflows. Plasmids often have lower coverage, distinct nucleotide composition, or higher repeat content compared to chromosomes, making them more susceptible to removal during filtering (Robertson, 2023). When filtering was removed (Figure 2), the plasmid sequences were retained, resulting in a noisier alignment with multiple overlapping regions. While this complicates interpretation, it also reveals repetitive and mobile genetic elements. Such elements are frequently associated with virulence and antimicrobial resistance and are a key source of genomic diversity in _Salmonella_ (Robertson, 2023).
 
 ### 5. Structural Variations
-As shown in Figure 3, genomic variability is much higher in plasmids than in the chromosome. Unlike the stable chromosomal core, plasmids are highly dynamic and undergo constant genetic exchange. This fluidity enables the bacteria to quickly gain new traits, such as host adaptation and drug resistance, through gene acquisition and rearrangement (Robertson, 2023).
+As shown in [Figure 3](#figure-3), genomic variability is much higher in plasmids than in the chromosome. Unlike the stable chromosomal core, plasmids are highly dynamic and undergo constant genetic exchange. This fluidity enables the bacteria to quickly gain new traits, such as host adaptation and drug resistance, through gene acquisition and rearrangement (Robertson, 2023).
 
 To quantify sequence level variation, SNPs and indels were summarized per gene (Figure 4). The majority of variants were concentrated in genes located on the pSLT plasmid, with several genes containing high SNP counts (>400–700 SNPs), while most genes contained few or no variants. Gene pSLT108 showed the highest SNP (755 SNPs), whereas STM1022 exhibited the highest number of indels (68 indels). This distribution is consistent with known bacterial mutation patterns, where SNPs occur more frequently than indels, with an estimated ratio of 0.5–2 indels per 10 SNPs in prokaryotic genomes (Felten et al., 2017). The lack of indels shows that the genome is under pressure to avoid frameshift mutations, which are usually harmful to protein function.
 
