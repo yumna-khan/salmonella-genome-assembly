@@ -2,6 +2,18 @@
 ## General Overview
 This project reconstructs the genome of _Salmonella enterica_ using Oxford Nanopore long-read sequencing and evaluates assembly quality, alignment accuracy, and genomic variation. The analysis focuses on both chromosomal and plasmid sequences, highlighting differences in sequence conservation, structural variation, and gene level mutations.
 
+## Table of Contents
+- [Introduction](#introduction)
+- [Methods](#methods)
+  - [1. Data Description](#1-data-description)
+  - [2. Quality Control](#2-quality-control)
+  - [3. Genome Assembly](#3-genome-assembly)
+  - [4. Alignment](#4-alignment)
+  - [5. Variant Calling](#5-variant-calling)
+- [Results](#results)
+- [Discussion](#discussion)
+- [References](#references)
+
 ## Introduction
 Genome assembly reconstructs a complete DNA sequence from shorter sequencing reads, enabling the study of an organism’s genetic content (Koren et al., 2013). Since many sequencing platforms cannot read an entire chromosome in a single read, DNA is fragmented and sequenced multiple times to ensure sufficient coverage across the genome (Wick et al., 2023). Despite advances in sequencing technologies, genome assembly remains challenging due to repetitive regions, sequencing errors, and uneven coverage. In particular, repeats longer than individual reads can result in fragmented or misassembled genomes, limiting their utility for downstream comparative and functional analyses (Koren et al., 2013). 
 
