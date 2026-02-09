@@ -1,0 +1,155 @@
+############################################
+# Genome Assembly and Variant Calling Pipeline
+# Salmonella enterica (ONT long reads)
+# Includes assembly, alignment, variant calling, and visualization
+# All commands are reproducible using Apptainer containers or standard tools
+# Steps 1 - 5 are completed in the command line
+############################################
+
+#-----------------------------
+# 1. Quality Control
+#-----------------------------
+apptainer exec ~/containers/nanoplot.sif NanoPlot \
+  --fastq SRR32410565.fastq \
+  --outdir nanoplot_raw
+
+
+#-----------------------------
+# 2. Genome Assembly
+#-----------------------------
+apptainer exec ~/containers/flye.sif flye \
+  --nano-hq SRR32410565.fastq \
+  --genome-size 5m \
+  --out-dir flye_unfiltered \
+  --threads 16
+
+# Evaluate assembly quality using QUAST
+quast.py \
+ flye_unfiltered/assembly.fasta \
+  -r GCF_000006945.2_ASM694v2_genomic.fna \
+  -o qc/quast \
+  --threads 8
+
+
+#-----------------------------
+# 3. Alignment
+#-----------------------------
+## 3a. Raw reads to the reference
+
+minimap2 -ax map-ont GCF_000006945.2_ASM694v2_genomic.fna SRR32410565.fastq > reads.sam
+
+samtools view -bS reads.sam > reads.bam
+samtools sort reads.bam > reads.sorted.bam
+samtools faidx GCF_000006945.2_ASM694v2_genomic.fna
+samtools index reads.sorted.bam
+
+# Alignment statistics
+samtools flagstat reads.sorted.bam > alignment.flagstat.txt
+samtools stats reads.sorted.bam > alignment.stats.txt
+
+# Average depth
+samtools depth reads.sorted.bam | \
+awk '{sum+=$3} END { print "Average depth = ",sum/NR}'
+
+
+## 3b. Assembled contigs to reference
+minimap2 -ax asm5 \
+  GCF_000006945.2_ASM694v2_genomic.fna \
+ flye_unfiltered/assembly.fasta \
+  | samtools sort -o qc/assembly_vs_ref.bam
+
+samtools index qc/assembly_vs_ref.bam
+
+
+#-----------------------------
+# 4. Variant Calling
+#-----------------------------
+apptainer exec --env CONDA_PREFIX=/opt/conda/envs/clair3 ~/containers/clair3.sif \
+  /opt/bin/run_clair3.sh \
+  --bam_fn reads.sorted.bam \
+  --ref_fn GCF_000006945.2_ASM694v2_genomic.fna \
+  --threads 8 \
+  --platform ont \
+  --model_path /opt/models/ont \
+  --include_all_ctgs \
+  --output clair3_polish_out
+
+
+#-----------------------------
+# 5. Circos Plots
+#-----------------------------
+# Plot 1: Filtered assembly alignment (high confidence contigs)
+circos -conf circos_filtered.conf
+# Thresholds for alignment filtering: ≥90% identity, ≥10 kb alignments
+
+# Plot 2: Unfiltered assembly alignment (all contigs)
+circos -conf circos_unfiltered.conf
+
+# Plot 3: Structural variants (SNPs and Indels)
+circos -conf circos_variants.conf
+
+
+#-----------------------------
+# 6. Barplot of Variants per Gene (R)
+#-----------------------------
+# Load libraries
+library(VariantAnnotation)
+library(GenomicFeatures)
+library(ggbio)
+library(GenomicRanges)
+library(txdbmaker)
+library(dplyr)
+library(ggplot2)
+
+vcf_file <- "merge_output.vcf"
+gff_file <- "genomic.gff"
+vcf <- readVcf(vcf_file, genome = "GCF_000006945.2_ASM694v2_genomic.fna")
+
+# Convert to GRanges (seqnames, ranges, strands)
+vr <- rowRanges(vcf)
+
+# Extract first alt allele
+first_alt <- sapply(vr$ALT, function(x) as.character(x[1]))
+vr$VariantType <- ifelse(nchar(as.character(vr$REF)) == 1 & nchar(first_alt) == 1, "SNP", "INDEL")
+
+# Filter low quality reads
+pass_idx <- vr$FILTER == "PASS" | vr$FILTER == "."
+vr_pass <- vr[pass_idx]
+
+table(vr_pass$VariantType)
+
+txdb <- makeTxDbFromGFF(gff_file, format = "gff")
+
+# Get gene coordinates
+genes_gr <- genes(txdb)
+
+
+# Find which variants fall inside which genes
+hits <- findOverlaps(vr, genes_gr)
+
+# Create a table of variants per gene
+df <- data.frame(
+  gene = names(genes_gr)[subjectHits(hits)],
+  VariantType = vr$VariantType[queryHits(hits)]
+)
+
+# Count SNPs and indels per gene
+summary_df <- df %>%
+  group_by(gene, VariantType) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  filter(count >= 2)
+
+sv_count <- summary_df %>%
+  group_by(VariantType) %>%
+  filter(count == max(count)) %>%
+  ungroup()
+sv_count
+
+# Plot
+ggplot(summary_df, aes(x = gene, y = count, fill = VariantType)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, size = 7)) +
+  labs(title = "Variants per Gene", x = "Gene", y = "Number of Variants")
+
+
