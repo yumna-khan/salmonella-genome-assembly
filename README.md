@@ -10,6 +10,7 @@ This project reconstructs the genome of _Salmonella enterica_ using Oxford Nanop
   - [3. Genome Assembly](#3-genome-assembly)
   - [4. Alignment](#4-alignment)
   - [5. Variant Calling](#5-variant-calling)
+  - [6. Visualization](#6-visualization)
 - [Results](#results)
 - [Discussion](#discussion)
 - [References](#references)
