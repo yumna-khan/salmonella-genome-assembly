@@ -72,7 +72,7 @@ Lastly, a barplot was created to view specific genes containing structural varia
 **Table 2:** Genes variants counts, location, and function
 | Gene               | Genomic location       | SNP count | Indel count | Functional annotation                                    |
 | ------------------ | ---------------------- | --------- | ----------- | -------------------------------------------------------- |
-| **pSLT108 (traT)** | pSLT virulence plasmid | 755      | 41         | Outer membrane lipoprotein involved in surface exclusion |
+| **pSLT108 (traI)** | pSLT virulence plasmid | 755      | 41         | Conjugative relaxase required for plasmid DNA transfer |
 | **STM1022**        | Chromosome             | 103      | 68         | Chaperone-associated protein involved in stress response |
 
 
@@ -80,22 +80,22 @@ Lastly, a barplot was created to view specific genes containing structural varia
 
 ![Figure 1: Circos assembly map of raw reads to reference (filtered)](results/figures/circos_filtered.png)
 
-**Figure 1:** Circos visualization of alignments between the assembled contigs and the _Salmonella enterica_ reference genome (ASM694v2) after **filtering**. The reference chromosome is shown in grey, with assembled contigs shown in blue and orange. 
+**Figure 1:** Filtered alignments (≥90 % identity and ≥10 kb) between assembled contigs and the S. enterica reference show two large contigs covering most of the chromosome (grey ideogram). Blue ribbons represent filtered alignments from contigs to the reference. The absence of connections over the smaller plasmid sequence (NC_003277.2) demonstrates that filtering removed shorter or lower identity plasmid alignments. 
 
 
 ![Figure 2: Circos assembly map of raw reads to reference (unfiltered)](results/figures/circos_unfiltered.png)
 
-**Figure 2:** Circos visualization of unfiltered alignments between the assembled contigs and the _Salmonella enterica_ reference genome (ASM694v2). The reference is shown in grey, with contigs shown in blue, orange, and red. 
+**Figure 2:** All alignments between assembly and reference, without identity/length filters, are shown. Plasmid sequences and repetitive segments are visible as additional linking ribbons, indicating plasmid-derived and mobile element contributions that were excluded in Figure 1. 
 
 
 ![Figure 3: Circos assembly map of variants](results/figures/circos_sv.png)
 
-**Figure 3:** Circos plot showing the distribution of SNPs (blue) and indels (red) relative to the _Salmonella enterica_ reference genome (grey).
+**Figure 3:** Circos plot showing SNPs (blue ticks) and indels (red ticks) mapped relative to the reference coordinates. Variant density is higher on plasmid regions than on the chromosome.
 
 
 ![Figure 4: barplot of variants per gene](results/figures/variants_per_gene.png)
 
-**Figure 4:** Bar plot showing the number of SNPs and indels per gene. Only genes containing two or more variants are shown to emphasize loci with elevated sequence variation.
+**Figure 4:** Bar plot of gene level variant counts, limited to genes with ≥2 variants. Bars are colored by variant type (blue for SNPs, red for indels). Genes with the highest variant counts are labeled (e.g., pSLT108, STM1022), emphasizing variants concentrated in plasmid associated loci.
 
 
 ## Discussion
@@ -113,14 +113,14 @@ Moreover, the average sequencing depth of ~154x exceeds the typical 60–80x cov
 ### 4. Whole Genome Alignment
 Whole genome alignment of the assembled contigs to the reference genome was performed with and without filtering to assess the impact of alignment. In the filtered alignment ([Figure 1](results/figures/circos_filtered.png)), two contigs map strongly to NC_003197.2, the chromosome of _Salmonella enterica_ serovar Typhimurium LT2. This genetic consistency reflects the nature of the _Salmonella_ core genome, which is generally stable among isolates belonging to the same serovar, defined by shared surface antigens (Luo et al., 2012). The near total coverage of the reference genome confirms a highly accurate assembly with minimal risk of large-scale errors, justifying its use for downstream analysis. 
 
-A notable gap in the filtered alignment corresponds to NC_003277.2, the pSLT virulence plasmid. This plasmid was excluded under filtering conditions due to length and/or quality thresholds, highlighting a common challenge in genome assembly workflows. Plasmids often have lower coverage, distinct nucleotide composition, or higher repeat content compared to chromosomes, making them more susceptible to removal during filtering (Robertson, 2023). When filtering was removed ([Figure 2](results/figures/circos_unfiltered.png)), the plasmid sequences were retained, resulting in a noisier alignment with multiple overlapping regions. While this complicates interpretation, it also reveals repetitive and mobile genetic elements. Such elements are frequently associated with virulence and antimicrobial resistance and are a key source of genomic diversity in _Salmonella_ (Robertson, 2023).
+A notable gap in the filtered alignment corresponds to NC_003277.2, the pSLT virulence plasmid. This plasmid was excluded under filtering conditions due to length and/or quality thresholds, highlighting a common challenge in genome assembly workflows. Plasmids often have lower coverage, distinct nucleotide composition, or higher repeat content compared to chromosomes, making them more susceptible to removal during filtering (Robertson et al., 2023). When filtering was removed ([Figure 2](results/figures/circos_unfiltered.png)), the plasmid sequences were retained, resulting in a noisier alignment with multiple overlapping regions. While this complicates interpretation, it also reveals repetitive and mobile genetic elements. Such elements are frequently associated with virulence and antimicrobial resistance and are a key source of genomic diversity in _Salmonella_ (Robertson et al., 2023).
 
 ### 5. Structural Variations
-As shown in [Figure 3](results/figures/circos_sv.png), genomic variability is much higher in plasmids than in the chromosome. Unlike the stable chromosomal core, plasmids are highly dynamic and undergo constant genetic exchange. This fluidity enables the bacteria to quickly gain new traits, such as host adaptation and drug resistance, through gene acquisition and rearrangement (Robertson, 2023).
+As shown in [Figure 3](results/figures/circos_sv.png), genomic variability is much higher in plasmids than in the chromosome. Unlike the stable chromosomal core, plasmids are highly dynamic and undergo constant genetic exchange. This fluidity enables the bacteria to quickly gain new traits, such as host adaptation and drug resistance, through gene acquisition and rearrangement (Robertson et al., 2023).
 
 To quantify sequence level variation, SNPs and indels were summarized per gene ([Figure 4](results/figures/variants_per_gene.png)). The majority of variants were concentrated in genes located on the pSLT plasmid, with several genes containing high SNP counts (>400–700 SNPs), while most genes contained few or no variants. Gene pSLT108 showed the highest SNP (755 SNPs), whereas STM1022 exhibited the highest number of indels (68 indels). This distribution is consistent with known bacterial mutation patterns, where SNPs occur more frequently than indels, with an estimated ratio of 0.5–2 indels per 10 SNPs in prokaryotic genomes (Felten et al., 2017). The lack of indels shows that the genome is under pressure to avoid frameshift mutations, which are usually harmful to protein function.
 
-Moreover, the pSLT108 gene is located on the pSLT virulence plasmid and is commonly annotated as traT. This gene encodes an outer membrane lipoprotein involved in surface exclusion, a mechanism that prevents the entry of redundant plasmids into cells already harboring pSLT (Chen et al., 2025). SNPs within coding regions may be synonymous (silent) or nonsynonymous (missense) (Loo et al., 2020). While synonymous mutations do not alter the amino acid sequence, missense mutations can influence protein structure, stability, or activity. The high SNP density observed in pSLT108 may therefore reflect adaptive fine tuning of plasmid associated functions, allowing sequence diversification without compromising essential plasmid maintenance or virulence roles.
+Moreover, the pSLT108 gene is located on the pSLT virulence plasmid and is commonly annotated as traI. This gene encodes a relaxase enzyme essential for initiating plasmid conjugation, which allows the transfer of pSLT to other bacterial cells (McLaughlin et al., 2014). SNPs within coding regions may be synonymous (silent) or nonsynonymous (missense) (Loo et al., 2020). While synonymous mutations do not alter the amino acid sequence, missense mutations can influence protein structure, stability, or enzymatic activity. The high SNP density observed in pSLT108 may therefore reflect adaptive diversification of the conjugation machinery, enabling sequence variation without compromising plasmid transfer function or maintenance.
 
 In contrast, STM1022 is annotated as a chaperone associated gene involved in protein folding and stability under stress conditions (Pullinger et al., 2008). Insertions and deletions within coding regions are more likely to result in frameshift mutations, which alter the downstream reading frame and frequently produce truncated or nonfunctional proteins (Williams et al., 2013). The accumulation of indels in STM1022 suggests that this gene may tolerate loss-of-function mutations or be under relaxed selective pressure, potentially reducing stress tolerance or virulence without being lethal to the bacterium (Lin et al., 2017).
 
@@ -128,8 +128,6 @@ In contrast, STM1022 is annotated as a chaperone associated gene involved in pro
 Overall, the observed variant profile aligns with biological expectations for _Salmonella enterica_ and reinforces the importance of variant calling in bacterial genomics; where core chromosomal genes remain conserved while plasmid-encoded and accessory genes accumulate greater sequence variation. Such analyses are essential for understanding evolutionary relationships, tracking transmission, and identifying genetic determinants of antimicrobial resistance (Hall et al., 2024).
 
 ## References
-Chen, N., Bukys, A., Lundgren, C. a. K., Deme, J. C., Sayyed, H. E., Kapanidis, A. N., Lea, S. M., & Berks, B. C. (2025). Structure of the conjugation surface exclusion protein TraT. Communications Biology, 8(1), 1702. https://doi.org/10.1038/s42003-025-09102-8
-
 De Coster, W., D’Hert, S., Schultz, D. T., Cruts, M., & Van Broeckhoven, C. (2018). NanoPack: visualizing and processing long-read sequencing data. Bioinformatics, 34(15), 2666–2669. https://academic.oup.com/bioinformatics/article/34/15/2666/4934939
 
 E Pearce, M., C. Langridge C, G., & Lauer D, A. C. (2021, September). An evaluation of the species and subspecies of the genus Salmonella with whole genome sequence data: Proposal of Type Strains and epithets for Novel S. Enterica Subspecies VII, VIII, IX, X and XI. ScienceDirect. https://www.sciencedirect.com/science/article/pii/S0888754321002810
@@ -155,6 +153,8 @@ Li, H. (2018). Minimap2: pairwise alignment for nucleotide sequences. Bioinforma
 Lin, M., Whitmire, S., Chen, J., Farrel, A., Shi, X., & Guo, J. (2017). Effects of short indels on protein structure and function in human genomes. Scientific Reports, 7(1), 9313. https://doi.org/10.1038/s41598-017-09287-x
 
 Luo, Y., Kong, Q., Yang, J., Mitra, A., Golden, G., Wanda, S., Roland, K. L., Jensen, R. V., Ernst, P. B., & Curtiss, R. (2012). Comparative genome analysis of the High pathogenicity Salmonella typhimurium strain UK-1. PLoS ONE, 7(7), e40645. https://doi.org/10.1371/journal.pone.0040645
+
+McLaughlin, K. J., Nash, R. P., & Redinbo, M. R. (2014). Unique Helicase Determinants in the Essential Conjugative TraI Factor from Salmonella enterica Serovar Typhimurium Plasmid pCU1. Journal of Bacteriology, 196(17), 3082–3090. https://doi.org/10.1128/jb.01496-14
 
 Magoc, T., Pabinger, S., Canzar, S., Liu, X., Su, Q., Puiu, D., Tallon, L. J., & Salzberg, S. L. (2013). GAGE-B: an evaluation of genome assemblers for bacterial organisms. Bioinformatics, 29(14), 1718–1725. https://doi.org/10.1093/bioinformatics/btt273
 
