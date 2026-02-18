@@ -72,7 +72,7 @@ Lastly, a barplot was created to view specific genes containing structural varia
 **Table 2:** Genes variants counts, location, and function
 | Gene               | Genomic location       | SNP count | Indel count | Functional annotation                                    |
 | ------------------ | ---------------------- | --------- | ----------- | -------------------------------------------------------- |
-| **pSLT108 (traI)** | pSLT virulence plasmid | 755      | 41         | Conjugative relaxase required for plasmid DNA transfer |
+| **pSLT108 (traI)** | pSLT plasmid | 755      | 41         | Conjugative relaxase required for plasmid DNA transfer |
 | **STM1022**        | Chromosome             | 103      | 68         | Chaperone-associated protein involved in stress response |
 
 
