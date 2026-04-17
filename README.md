@@ -80,23 +80,28 @@ Lastly, a barplot was created to view specific genes containing structural varia
 
 ![Figure 1: Circos assembly map of raw reads to reference (filtered)](results/figures/circos_filtered.png)
 
-**Figure 1:** Filtered alignments (≥90 % identity and ≥10 kb) between assembled contigs and the S. enterica reference show two large contigs covering most of the chromosome (grey ideogram). Blue ribbons represent filtered alignments from contigs to the reference. The absence of connections over the smaller plasmid sequence (NC_003277.2) demonstrates that filtering removed shorter or lower identity plasmid alignments. 
+**Figure 1:** Circos plot showing alignments between the three assembled contigs and the _S. enterica_ reference genome, filtered for ≥90% sequence identity and alignment lengths ≥10 kb. Blue ribbons connect contig regions to the reference; the outer grey ideogram shows the chromosome (NC_003197.2, ~4.9 Mb) and pSLT plasmid (NC_003277.2, ~94 kb).
+
+The filtered alignment reveals two large contigs mapping continuously across nearly the entire chromosome (NC_003197.2), consistent with the high N50 of ~4.6 Mb and confirming strong structural agreement between the assembly and the reference. Notably, no ribbons connect to the pSLT plasmid (NC_003277.2), indicating that plasmid-derived alignments were removed by the strict identity and length thresholds. This is a known limitation of aggressive filtering when applied to shorter, more divergent replicons such as plasmids.
 
 
 ![Figure 2: Circos assembly map of raw reads to reference (unfiltered)](results/figures/circos_unfiltered.png)
 
-**Figure 2:** All alignments between assembly and reference, without identity/length filters, are shown. Plasmid sequences and repetitive segments are visible as additional linking ribbons, indicating plasmid-derived and mobile element contributions that were excluded in Figure 1. 
+**Figure 2:** All alignments between the assembled contigs and the S. enterica reference genome, with no identity or length filters applied. Blue ribbons connect contig regions to both the chromosome (NC_003197.2) and the pSLT plasmid (NC_003277.2). 
 
+When filtering thresholds are removed (e.g. sequence identity ≥90% and alignment lengths ≥10 kb), plasmid sequences and repetitive chromosomal regions become visible as additional overlapping ribbons. Connections to the pSLT plasmid (NC_003277.2) confirm that plasmid sequences are represented in the assembly but were excluded under the strict filtering criteria used in [Figure 1](results/figures/circos_filtered.png). The increased ribbon density across the chromosome reflects insertion elements and repetitive regions common in _Salmonella_ genomes. While this makes the plot more difficult to interpret visually, it provides a more complete picture of the assembly's structural content.
 
 ![Figure 3: Circos assembly map of variants](results/figures/circos_sv.png)
 
-**Figure 3:** Circos plot showing SNPs (blue ticks) and indels (red ticks) mapped relative to the reference coordinates. Variant density is higher on plasmid regions than on the chromosome.
+**Figure 3:** Circos plot showing the genomic distribution of SNPs (blue ticks) and indels (red ticks) called by Clair3 from raw read alignments, mapped relative to the _S. enterica_ reference coordinates. The outer ideogram shows the chromosome (NC_003197.2) and pSLT plasmid (NC_003277.2).
 
+Variant density is visibly and substantially higher across the pSLT plasmid than the chromosome. SNPs are more abundant than indels genome-wide, consistent with known prokaryotic mutation patterns. The sparse variant distribution across the chromosome reflects the conserved nature of the _Salmonella_ core genome, while the dense clustering of variants on the plasmid highlights its role as a hotspot for sequence variation and genetic exchange.
 
 ![Figure 4: barplot of variants per gene](results/figures/variants_per_gene.png)
 
-**Figure 4:** Bar plot of gene level variant counts, limited to genes with ≥2 variants. Bars are colored by variant type (blue for SNPs, red for indels). Genes with the highest variant counts are labeled (e.g., pSLT108, STM1022), emphasizing variants concentrated in plasmid associated loci.
+**Figure 4:** Bar plot of SNP (blue) and indel (red) counts per gene, restricted to genes with ≥2 variants. Gene annotations were derived from the _S. enterica_ LT2 reference GFF file and variant calls from Clair3. The two highest-variant genes are labeled.
 
+The bar plot confirms that variant burden is highly skewed, with most genes carrying few variants and a small number of genes accumulating the majority. The plasmid-encoded gene pSLT108 (traI) had the highest SNP count (755 SNPs, 41 indels), while the chromosomal gene STM1022 had the most indels (68 indels, 103 SNPs). The predominance of plasmid-associated genes among the high-variant loci is consistent with the elevated variant density observed on the pSLT plasmid in [Figure 3](results/figures/circos_sv.png), reinforcing that plasmid regions are the primary source of genomic variability in this assembly.
 
 ## Discussion
 ### 1. Sequencing Quality and Data Evaluation
